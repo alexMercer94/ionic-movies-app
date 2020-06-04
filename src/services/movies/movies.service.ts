@@ -11,6 +11,8 @@ const apiKey = environment.apiKey;
     providedIn: 'root',
 })
 export class MoviesService {
+    private popularesPage = 0;
+
     constructor(private http: HttpClient) {}
 
     // * Private Methods
@@ -43,5 +45,24 @@ export class MoviesService {
             `/discover/movie?primary_release_date.gte=${startdate}&primary_release_date.lte=${endDate}`
         );
         return this.http.get(url).pipe(tap((res: IGetMoviesFeatures) => res));
+    }
+
+    public getPopulares(): Observable<IGetMoviesFeatures> {
+        this.popularesPage++;
+        const url = this.executeQuery(`/discover/movie?sort_by=popularity.desc&page=${this.popularesPage}`);
+
+        return this.http.get(url).pipe(tap((res: IGetMoviesFeatures) => res));
+    }
+
+    public getDetailMovie(movieId: string): Observable<IGetMovieDetail> {
+        const url = this.executeQuery(`/movie/${movieId}?a=1`);
+
+        return this.http.get(url).pipe(tap((res: IGetMovieDetail) => res));
+    }
+
+    public getMovieCredits(id: string): Observable<IGetCredits> {
+        const url = this.executeQuery(`/movie/${id}/credits?a=1`);
+
+        return this.http.get(url).pipe(tap((res: IGetCredits) => res));
     }
 }

@@ -8,13 +8,31 @@ import { MoviesService } from 'src/services/movies/movies.service';
 })
 export class Tab1Page implements OnInit {
     recentsMovies: Movie[] = [];
+    populares: Movie[] = [];
 
     constructor(private moviesService: MoviesService) {}
 
     ngOnInit() {
         this.moviesService.getFeature().subscribe((res: IGetMoviesFeatures) => {
-            console.log(res);
             this.recentsMovies = res.results;
         });
+
+        this.getPopulares();
+    }
+
+    public getPopulares(): void {
+        this.moviesService.getPopulares().subscribe((res: IGetMoviesFeatures) => {
+            const arrTemp = [...this.populares, ...res.results];
+            this.populares = arrTemp;
+        });
+    }
+
+    // * User Interaction
+
+    /**
+     * Load more movies
+     */
+    public loadMore(): void {
+        this.getPopulares();
     }
 }

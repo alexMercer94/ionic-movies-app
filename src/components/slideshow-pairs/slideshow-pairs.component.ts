@@ -1,21 +1,31 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { DetailComponent } from '../detail/detail.component';
 
 @Component({
-    selector: 'app-slideshow-poster',
-    templateUrl: './slideshow-poster.component.html',
-    styleUrls: ['./slideshow-poster.component.scss'],
+    selector: 'app-slideshow-pairs',
+    templateUrl: './slideshow-pairs.component.html',
+    styleUrls: ['./slideshow-pairs.component.scss'],
 })
-export class SlideshowPosterComponent implements OnInit {
+export class SlideshowPairsComponent implements OnInit {
     @Input() movies: Movie[] = [];
+    @Output() loadMore = new EventEmitter();
+
     slidesOpts = {
         slidesPerView: 3.3,
+        spaceBetween: -10,
     };
 
     constructor(private modalCtrl: ModalController) {}
 
     ngOnInit() {}
+
+    /**
+     * Load more movies
+     */
+    public onClick(): void {
+        this.loadMore.emit();
+    }
 
     /**
      * Show movie detail
